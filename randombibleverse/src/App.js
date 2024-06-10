@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
-import { useEffect } from "react";
+import { act, useEffect } from "react";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -19,6 +19,7 @@ import Droppable from "./Droppable";
 import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -46,8 +47,18 @@ function App() {
     verse: verse,
   });
   const [selectedVersesArray, setSelectedVersesArray] = useState([]);
+  console.log(selectedVersesArray);
   const [droppedSelectedVerses, setDroppedSelectedVerses] = useState([]);
-  console.log(selectedVerses);
+  console.log("dsv", droppedSelectedVerses); //should be inside container
+  const [showInputForm, setShowInputForm] = useState(false);
+
+  const [containers, setContainers] = useState({});
+  console.log("container", containers);
+
+  function toggleInput() {
+    setShowInputForm((showInputForm) => !showInputForm);
+  }
+
   const otBooks = [
     "Genesis",
     "Exodus",
@@ -145,18 +156,8 @@ function App() {
   const handleVerse1Change = (event) => {
     setVerse(event.target.value);
   };
-  // useEffect(() => {
-  //   fetch("/api/data")
-  //     .then((response) => response.json())
-  //     .then((data) => console.log(data));
-  // });
+
   function handleRandom() {
-    // axios.get("api/data").then((response) => {
-    //   console.log(response);
-    // });
-    // fetch("/api/data")
-    //   .then((response) => response.json())
-    //   .then((data) => console.log(data));
     axios
       .get("http://labs.bible.org/api/?passage=random&type=json")
       .then((response) => {
@@ -179,6 +180,7 @@ function App() {
         setVerse(response.data[0].verse);
 
         const newSelectedVerse = {
+          overid: null,
           text: response.data[0].text,
           bookname: response.data[0].bookname,
           chapter: response.data[0].chapter,
@@ -189,7 +191,23 @@ function App() {
       })
       .catch((error) => console.error(error));
   }
-  console.log("sv array", selectedVersesArray);
+
+  const handleKeyUp = (event) => {
+    let newContainer = [];
+    if (event.key === "Enter" && event.target.value.trim !== "") {
+      const title = event.target.value;
+      const verses = [];
+      // containers.title = verses;
+      // const containerObject = {
+      //   [title]: verses,
+      // };
+      // newContainer.push(containerObject);
+      setContainers({ ...containers, [title]: verses });
+      // console.log("containerObject", containerObject);
+      // console.log("container", container);
+    }
+    console.log(event);
+  };
 
   return (
     <div className="App">
@@ -241,13 +259,36 @@ function App() {
           </Grid>
 
           <Grid item xs={6}>
-            {text}
             <Item>
-              <Droppable id={"select"}>
-                {droppedSelectedVerses.map((verse) => (
-                  <p>{verse.text}</p>
-                ))}
-              </Droppable>
+              <Button onClick={toggleInput}>
+                <IoIosAddCircleOutline></IoIosAddCircleOutline>
+              </Button>
+              {showInputForm && (
+                <TextField
+                  id="filled-password-input"
+                  label="New Container"
+                  autoComplete="current-password"
+                  variant="filled"
+                  onKeyUp={handleKeyUp}
+                />
+              )}
+            </Item>
+            <Item>
+              {Object.keys(containers).map((box) => (
+                <Droppable id={box}>
+                  <p>{box}</p>
+                  {console.log("cb", containers[box])}
+                  {droppedSelectedVerses.map((dSV) => (
+                    <p>{dSV.text}</p>
+                  ))}
+
+                  {/* {droppedSelectedVerses.reduce((result, option) => {
+                    if (option.id === box.id) {
+                      console.log(option.text);
+                    }
+                  }, 0)} */}
+                </Droppable>
+              ))}
             </Item>
           </Grid>
           <Grid item xs={6}>
@@ -270,9 +311,9 @@ function App() {
             </Item>
           </Grid>
           <Grid item xs={6}>
-            <Item>
+            {/* <Item>
               <Droppable id={"random"}></Droppable>
-            </Item>
+            </Item> */}
           </Grid>
         </Grid>
       </DndContext>
@@ -280,14 +321,19 @@ function App() {
   );
 
   function handleDragEnd(event) {
-    console.log(event);
+    console.log("event", event);
     const { over } = event;
+    console.log("over", over);
     if (over) {
       const activeVerse = selectedVersesArray.find(
         ({ text }) => text === event.active.id
       );
+      activeVerse.id = over.id;
       console.log("active verse", activeVerse);
-      if (activeVerse) {
+      // if (activeVerse) {
+      //   setDroppedSelectedVerses([...droppedSelectedVerses, activeVerse]);
+      // }
+      if (!droppedSelectedVerses.includes(activeVerse)) {
         setDroppedSelectedVerses([...droppedSelectedVerses, activeVerse]);
       }
     }
