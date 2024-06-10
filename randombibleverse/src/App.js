@@ -1,18 +1,13 @@
-import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
-import { act, useEffect } from "react";
 import { useState } from "react";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import ListSubheader from "@mui/material/ListSubheader";
 import { Button, TextField } from "@mui/material";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import { DndContext } from "@dnd-kit/core";
 import Draggable from "./Draggable";
 import Droppable from "./Droppable";
@@ -40,21 +35,12 @@ function App() {
   const [verseRandom, setVerseRandom] = useState("");
 
   const [randomVerses, setRandomVerses] = useState([]);
-  const [selectedVerses, setSelectedVerses] = useState({
-    text: text,
-    bookname: bookname,
-    chapter: chapter,
-    verse: verse,
-  });
+
   const [selectedVersesArray, setSelectedVersesArray] = useState([]);
-  console.log(selectedVersesArray);
   const [droppedSelectedVerses, setDroppedSelectedVerses] = useState([]);
-  console.log("dsv", droppedSelectedVerses); //should be inside container
   const [showInputForm, setShowInputForm] = useState(false);
 
   const [containers, setContainers] = useState({});
-  console.log("container", containers);
-
   function toggleInput() {
     setShowInputForm((showInputForm) => !showInputForm);
   }
@@ -165,6 +151,15 @@ function App() {
         setBooknameRandom(response.data[0].bookname);
         setChapterRandom(response.data[0].chapter);
         setVerseRandom(response.data[0].verse);
+
+        const newSelectedVerse = {
+          text: response.data[0].text,
+          bookname: response.data[0].bookname,
+          chapter: response.data[0].chapter,
+          verse: response.data[0].verse,
+        };
+        console.log("newSelectedVerse", newSelectedVerse);
+        selectedVersesArray.push(newSelectedVerse);
       })
       .catch((error) => console.error(error));
   }
@@ -192,20 +187,12 @@ function App() {
   }
 
   const handleKeyUp = (event) => {
-    let newContainer = [];
     if (event.key === "Enter" && event.target.value.trim !== "") {
       const title = event.target.value;
       const verses = [];
-      // containers.title = verses;
-      // const containerObject = {
-      //   [title]: verses,
-      // };
-      // newContainer.push(containerObject);
+
       setContainers({ ...containers, [title]: verses });
-      // console.log("containerObject", containerObject);
-      // console.log("container", container);
     }
-    console.log(event);
   };
 
   return (
@@ -279,12 +266,6 @@ function App() {
                   {containers[box].map((verse) => (
                     <p>{verse.text}</p>
                   ))}
-
-                  {/* {droppedSelectedVerses.reduce((result, option) => {
-                    if (option.id === box.id) {
-                      console.log(option.text);
-                    }
-                  }, 0)} */}
                 </Droppable>
               ))}
             </Item>
@@ -308,11 +289,7 @@ function App() {
               </Draggable>
             </Item>
           </Grid>
-          <Grid item xs={6}>
-            {/* <Item>
-              <Droppable id={"random"}></Droppable>
-            </Item> */}
-          </Grid>
+          <Grid item xs={6}></Grid>
         </Grid>
       </DndContext>
     </div>
@@ -327,21 +304,13 @@ function App() {
         ({ text }) => text === event.active.id
       );
 
-      console.log("av", activeVerse);
       const container = over.id;
-      console.log("active verse", activeVerse);
       if (activeVerse) {
         setContainers({
           ...containers,
           [container]: [...containers[container], activeVerse],
         });
       }
-      // if (activeVerse) {
-      //   setDroppedSelectedVerses([...droppedSelectedVerses, activeVerse]);
-      // }
-      // if (!droppedSelectedVerses.includes(activeVerse)) {
-      //   setDroppedSelectedVerses([...droppedSelectedVerses, activeVerse]);
-      // }
     }
   }
 }
