@@ -180,7 +180,6 @@ function App() {
         setVerse(response.data[0].verse);
 
         const newSelectedVerse = {
-          overid: null,
           text: response.data[0].text,
           bookname: response.data[0].bookname,
           chapter: response.data[0].chapter,
@@ -277,9 +276,8 @@ function App() {
               {Object.keys(containers).map((box) => (
                 <Droppable id={box}>
                   <p>{box}</p>
-                  {console.log("cb", containers[box])}
-                  {droppedSelectedVerses.map((dSV) => (
-                    <p>{dSV.text}</p>
+                  {containers[box].map((verse) => (
+                    <p>{verse.text}</p>
                   ))}
 
                   {/* {droppedSelectedVerses.reduce((result, option) => {
@@ -328,14 +326,22 @@ function App() {
       const activeVerse = selectedVersesArray.find(
         ({ text }) => text === event.active.id
       );
-      activeVerse.id = over.id;
+
+      console.log("av", activeVerse);
+      const container = over.id;
       console.log("active verse", activeVerse);
+      if (activeVerse) {
+        setContainers({
+          ...containers,
+          [container]: [...containers[container], activeVerse],
+        });
+      }
       // if (activeVerse) {
       //   setDroppedSelectedVerses([...droppedSelectedVerses, activeVerse]);
       // }
-      if (!droppedSelectedVerses.includes(activeVerse)) {
-        setDroppedSelectedVerses([...droppedSelectedVerses, activeVerse]);
-      }
+      // if (!droppedSelectedVerses.includes(activeVerse)) {
+      //   setDroppedSelectedVerses([...droppedSelectedVerses, activeVerse]);
+      // }
     }
   }
 }
