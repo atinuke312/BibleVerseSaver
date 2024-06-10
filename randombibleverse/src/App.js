@@ -6,7 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import ListSubheader from "@mui/material/ListSubheader";
-import { Button, TextField } from "@mui/material";
+import { Button, CardContent, TextField } from "@mui/material";
 import Card from "@mui/material/Card";
 import { DndContext } from "@dnd-kit/core";
 import Draggable from "./Draggable";
@@ -15,6 +15,7 @@ import Grid from "@mui/material/Grid";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { blue } from "@mui/material/colors";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -24,10 +25,15 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 function App() {
+  const [textInput, setTextInput] = useState("");
+  const [booknameInput, setBooknameInput] = useState("");
+  const [chapterInput, setChapterInput] = useState("");
+  const [verse1Input, setVerse1Input] = useState("");
+
   const [text, setText] = useState("");
   const [bookname, setBookname] = useState("");
   const [chapter, setChapter] = useState("");
-  const [verse, setVerse] = useState("");
+  const [verse1, setVerse1] = useState("");
 
   const [textRandom, setTextRandom] = useState("");
   const [booknameRandom, setBooknameRandom] = useState("");
@@ -39,7 +45,8 @@ function App() {
   const [selectedVersesArray, setSelectedVersesArray] = useState([]);
   const [droppedSelectedVerses, setDroppedSelectedVerses] = useState([]);
   const [showInputForm, setShowInputForm] = useState(false);
-
+  const [showSelect, setShowSelect] = useState(false);
+  const [showRandom, setShowRandom] = useState(false);
   const [containers, setContainers] = useState({});
   function toggleInput() {
     setShowInputForm((showInputForm) => !showInputForm);
@@ -132,21 +139,22 @@ function App() {
   ));
 
   const handleBookChange = (event) => {
-    setBookname(event.target.value);
+    setBooknameInput(event.target.value);
   };
 
   const handleChapterChange = (event) => {
-    setChapter(event.target.value);
+    setChapterInput(event.target.value);
   };
 
   const handleVerse1Change = (event) => {
-    setVerse(event.target.value);
+    setVerse1Input(event.target.value);
   };
 
   function handleRandom() {
     axios
       .get("http://labs.bible.org/api/?passage=random&type=json")
       .then((response) => {
+        setShowRandom(true);
         setTextRandom(response.data[0].text);
         setBooknameRandom(response.data[0].bookname);
         setChapterRandom(response.data[0].chapter);
@@ -166,13 +174,15 @@ function App() {
   function handleSelect() {
     axios
       .get(
-        `http://labs.bible.org/api/?passage=${bookname}+${chapter}:${verse}&type=json`
+        `http://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}&type=json`
       )
       .then((response) => {
+        setShowSelect(true);
+
         setText(response.data[0].text);
         setBookname(response.data[0].bookname);
         setChapter(response.data[0].chapter);
-        setVerse(response.data[0].verse);
+        setVerse1(response.data[0].verse);
 
         const newSelectedVerse = {
           text: response.data[0].text,
@@ -192,8 +202,16 @@ function App() {
       const verses = [];
 
       setContainers({ ...containers, [title]: verses });
+      setShowInputForm(false);
     }
   };
+
+  function handleRemove(box, index) {
+    setContainers({
+      ...containers,
+      [box]: containers[box].filter((v, i) => index != i),
+    });
+  }
 
   return (
     <div className="App">
@@ -220,7 +238,7 @@ function App() {
               </FormControl>
               <TextField
                 onChange={handleChapterChange}
-                value={chapter}
+                value={chapterInput}
                 id="filled-password-input"
                 label="Chapter"
                 autoComplete="current-password"
@@ -228,7 +246,7 @@ function App() {
               />
               <TextField
                 onChange={handleVerse1Change}
-                value={verse}
+                value={verse1Input}
                 id="filled-password-input"
                 label="Verse"
                 autoComplete="current-password"
@@ -237,10 +255,17 @@ function App() {
               <Button variant="contained" onClick={handleSelect}>
                 Get verse
               </Button>
-
-              <Draggable id={text} key={text}>
-                <Card>{text}</Card>
-              </Draggable>
+              {showSelect && (
+                <Draggable id={text} key={text}>
+                  <Card>
+                    {text}
+                    <br></br>
+                    <br></br>
+                    {`${bookname} `}
+                    {chapter}:{verse1}
+                  </Card>
+                </Draggable>
+              )}
             </Item>
           </Grid>
 
@@ -259,16 +284,22 @@ function App() {
                 />
               )}
             </Item>
-            <Item>
-              {Object.keys(containers).map((box) => (
-                <Droppable id={box}>
-                  <p>{box}</p>
-                  {containers[box].map((verse) => (
-                    <p>{verse.text}</p>
-                  ))}
-                </Droppable>
-              ))}
-            </Item>
+
+            {Object.keys(containers).map((box) => (
+              <Droppable id={box}>
+                <h2>{box}</h2>
+                {containers[box].map((verse, i) => (
+                  <Item>
+                    <Card onClick={() => handleRemove(box, i)}>
+                      {verse.text}
+                      <br></br>
+                      {`${verse.bookname} `}
+                      {verse.chapter}:{verse.verse}
+                    </Card>
+                  </Item>
+                ))}
+              </Droppable>
+            ))}
           </Grid>
           <Grid item xs={6}>
             <Item>
@@ -276,17 +307,18 @@ function App() {
               <Button variant="contained" onClick={handleRandom}>
                 New Verse
               </Button>
-
-              <Draggable id={textRandom} key={textRandom}>
-                <Card>
-                  {textRandom}
-                  <br></br>
-                  <br></br>
-                  {booknameRandom}
-                  {chapterRandom}:{verseRandom}
-                  <br></br>
-                </Card>
-              </Draggable>
+              {showRandom && (
+                <Draggable id={textRandom} key={textRandom}>
+                  <Card>
+                    {textRandom}
+                    <br></br>
+                    <br></br>
+                    {`${booknameRandom} `}
+                    {chapterRandom}:{verseRandom}
+                    <br></br>
+                  </Card>
+                </Draggable>
+              )}
             </Item>
           </Grid>
           <Grid item xs={6}></Grid>
