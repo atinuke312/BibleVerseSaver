@@ -17,7 +17,10 @@ public class Controller {
         this.folderRepository = folderRepository;
     }
 
-
+@GetMapping("/folders")
+    public List<Folder>retrieveAllFolders(){
+        return folderRepository.findAll();
+}
 
 
 
