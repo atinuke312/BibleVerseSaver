@@ -6,7 +6,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.security.authentication.AuthenticationManager;
 
 
 @RestController
@@ -23,7 +22,9 @@ public class JwtAuthenticationController {
     @PostMapping("/authenticate")
     public ResponseEntity<JwtTokenResponse> generateToken(@RequestBody JwtTokenRequest jwtTokenRequest){
         var authenticationToken =
-                new UsernamePasswordAuthenticationToken(jwtTokenRequest.username(), jwtTokenRequest.password());
+                new UsernamePasswordAuthenticationToken(
+                        jwtTokenRequest.username(),
+                        jwtTokenRequest.password());
 
         var authentication = authenticationManager.authenticate(authenticationToken);
 

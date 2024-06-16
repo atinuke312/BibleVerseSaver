@@ -21,7 +21,10 @@ public class JwtTokenService {
 
     public String generateToken(Authentication authentication){
         var scope = authentication
-                .getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
+                .getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(" "));
         var claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(Instant.now())

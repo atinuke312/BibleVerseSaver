@@ -25,7 +25,7 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-function App() {
+function Verses() {
   const [textInput, setTextInput] = useState("");
   const [booknameInput, setBooknameInput] = useState("");
   const [chapterInput, setChapterInput] = useState("");
@@ -363,4 +363,4 @@ function App() {
   }
 }
 
-export default App;
+export default Verses;
