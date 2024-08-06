@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Verses from "./pages/Verses";
-import Login from "./pages/Login";
-import AuthProvider, { useAuth } from "./security/AuthContext";
-import Folder from "./pages/Folder";
+// import Login from "./pages/Login";
+// import AuthProvider, { useAuth } from "./security/AuthContext";
+// import Folder from "./pages/Folder";
 
 export default function BiblenetApp() {
   // function AuthenticatedRoute({ children }) {
@@ -14,6 +14,8 @@ export default function BiblenetApp() {
 
   return (
     <div>
+      {/* <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> </meta> */}
+
       {/* <AuthProvider> */}
       <BrowserRouter>
         <Routes>
