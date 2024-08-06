@@ -158,7 +158,7 @@ function Verses() {
 
   function handleRandom() {
     axios
-      .get("http://labs.bible.org/api/?passage=random&type=json")
+      .get("http://labs.bible.org/api/?passage=random&type=json/")
       .then((response) => {
         setShowRandom(true);
         setTextRandom(response.data[0].text);
