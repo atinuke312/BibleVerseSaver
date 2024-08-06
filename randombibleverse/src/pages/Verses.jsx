@@ -158,7 +158,7 @@ function Verses() {
 
   function handleRandom() {
     axios
-      .get("http://labs.bible.org/api/?passage=random&type=json/")
+      .get("https://labs.bible.org/api/?passage=random&type=json/")
       .then((response) => {
         setShowRandom(true);
         setTextRandom(response.data[0].text);
@@ -180,8 +180,8 @@ function Verses() {
   function handleSelect() {
     let url;
     verse2Input
-      ? (url = `http://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}-${verse2Input}&type=json/`)
-      : (url = `http://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}&type=json/`);
+      ? (url = `https://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}-${verse2Input}&type=json/`)
+      : (url = `https://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}&type=json/`);
 
     axios
       .get(url)
