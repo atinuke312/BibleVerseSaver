@@ -1,9 +1,6 @@
 package org.example.biblenetbackend.verse;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -15,15 +12,39 @@ public class Folder {
 
     private String name;
 
-    @ManyToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "folder")
     private List<Verse> verse;
 
     protected Folder(){}
 
     public Folder(Integer id, String name, List<Verse> verse) {
+        super();
         this.id = id;
         this.name = name;
         this.verse = verse;
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Verse> getVerse() {
+        return verse;
+    }
+
+    public void setVerse(List<Verse> verse) {
+        this.verse = verse;
+    }
 }

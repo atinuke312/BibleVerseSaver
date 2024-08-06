@@ -16,8 +16,14 @@ import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { blue } from "@mui/material/colors";
-import { retrieveAllFolders } from "../api/BiblenetApiService";
-
+import {
+  retrieveAllFoldersApi,
+  addNewFolderApi,
+  addVersesToFolderApi,
+} from "../api/BiblenetApiService";
+import { useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../security/AuthContext";
+import Folder from "./Folder";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -26,27 +32,24 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 function Verses() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [textInput, setTextInput] = useState("");
   const [booknameInput, setBooknameInput] = useState("");
   const [chapterInput, setChapterInput] = useState("");
   const [verse1Input, setVerse1Input] = useState("");
-  const [verse2Input, setVerse2Input] = useState("");
 
   const [text, setText] = useState("");
   const [bookname, setBookname] = useState("");
   const [chapter, setChapter] = useState("");
   const [verse1, setVerse1] = useState("");
-  const [verse2, setVerse2] = useState("");
 
   const [textRandom, setTextRandom] = useState("");
   const [booknameRandom, setBooknameRandom] = useState("");
   const [chapterRandom, setChapterRandom] = useState("");
   const [verseRandom, setVerseRandom] = useState("");
 
-  const [randomVerses, setRandomVerses] = useState([]);
-
   const [selectedVersesArray, setSelectedVersesArray] = useState([]);
-  const [droppedSelectedVerses, setDroppedSelectedVerses] = useState([]);
   const [showInputForm, setShowInputForm] = useState(false);
   const [showSelect, setShowSelect] = useState(false);
   const [showRandom, setShowRandom] = useState(false);
@@ -152,9 +155,6 @@ function Verses() {
   const handleVerse1Change = (event) => {
     setVerse1Input(event.target.value);
   };
-  const handleVerse2Change = (event) => {
-    setVerse2Input(event.target.value);
-  };
 
   function handleRandom() {
     axios
@@ -178,40 +178,39 @@ function Verses() {
       .catch((error) => console.error(error));
   }
   function handleSelect() {
-    let url;
-    verse2Input
-      ? (url = `http://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}-${verse2Input}&type=json`)
-      : (url = `http://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}&type=json`);
-
     axios
-      .get(url)
+      .get(
+        `http://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}&type=json`
+      )
       .then((response) => {
         setShowSelect(true);
-        verse2Input
-          ? setText(response.data.slice(0, 4).text)
-          : setText(response.data[0].text);
 
+        setText(response.data[0].text);
         setBookname(response.data[0].bookname);
         setChapter(response.data[0].chapter);
         setVerse1(response.data[0].verse);
 
-        const newSelectedVerse = {
+        const newRandomVerse = {
           text: response.data[0].text,
           bookname: response.data[0].bookname,
           chapter: response.data[0].chapter,
           verse: response.data[0].verse,
         };
-        console.log(response.data);
-        console.log("newSelectedVerse", newSelectedVerse);
-        selectedVersesArray.push(newSelectedVerse);
+        console.log("newSelectedVerse", newRandomVerse);
+        selectedVersesArray.push(newRandomVerse);
       })
       .catch((error) => console.error(error));
   }
+  const authContext = useAuth();
+
+  const username = authContext.username;
+
+  console.log("u", username);
 
   // useEffect(() => refreshFolders(), []);
 
   // function refreshFolders() {
-  //   retrieveAllFoldersApi()
+  //   retrieveAllFoldersApi(username)
   //     .then((response) => {
   //       console.log("api", response.data);
   //     })
@@ -220,15 +219,24 @@ function Verses() {
   //     });
   // }
 
-  const handleKeyUp = (event) => {
+  function handleKeyUp(event) {
     if (event.key === "Enter" && event.target.value.trim !== "") {
       const title = event.target.value;
+      console.log("t", title);
       const verses = [];
-
+      // const folder = {
+      //   title: title,
+      // };
+      // addNewFolderApi(username, folder)
+      //   .then((response) => {
+      //     console.log(response.data);
+      //   })
+      //   .catch((error) => console.log(error));
       setContainers({ ...containers, [title]: verses });
+
       setShowInputForm(false);
     }
-  };
+  }
 
   function handleRemove(box, index) {
     setContainers({
@@ -236,7 +244,10 @@ function Verses() {
       [box]: containers[box].filter((v, i) => index != i),
     });
   }
-
+  function handleClickBox(event) {
+    console.log(event);
+    navigate("/folders");
+  }
   return (
     <div className="App">
       <DndContext onDragEnd={handleDragEnd}>
@@ -276,18 +287,12 @@ function Verses() {
                 autoComplete="current-password"
                 variant="filled"
               />
-              <TextField
-                onChange={handleVerse2Change}
-                value={verse2Input}
-                id="filled-password-input"
-                label="Verse"
-                autoComplete="current-password"
-                variant="filled"
-              />
               <Button variant="contained" onClick={handleSelect}>
                 Get verse
               </Button>
-
+              {/* <Button variant="contained" onClick={refreshFolders}>
+                Call api
+              </Button> */}
               {showSelect && (
                 <Draggable id={text} key={text}>
                   <Card>
@@ -304,7 +309,6 @@ function Verses() {
 
           <Grid item xs={6}>
             <Item>
-              <h1>Cabinets</h1>
               <Button onClick={toggleInput}>
                 <IoIosAddCircleOutline></IoIosAddCircleOutline>
               </Button>
@@ -319,46 +323,45 @@ function Verses() {
               )}
             </Item>
 
-            {Object.keys(containers).map((box) => (
-              <Droppable id={box}>
-                <h2>{box}</h2>
-
-                {containers[box].map((verse, i) => (
-                  <Grid>
+            {Object.keys(containers).map((container) => (
+              <div onClick={handleClickBox}>
+                <Droppable id={container}>
+                  <h2>{container}</h2>
+                  {containers[container].map((verse, i) => (
                     <Item>
-                      <Card onClick={() => handleRemove(box, i)}>
+                      <Card onClick={() => handleRemove(container, i)}>
                         {verse.text}
                         <br></br>
                         {`${verse.bookname} `}
                         {verse.chapter}:{verse.verse}
                       </Card>
                     </Item>
-                  </Grid>
-                ))}
-              </Droppable>
+                  ))}
+                </Droppable>
+              </div>
             ))}
+
+            {/* <Folder content={containers}></Folder> */}
+            {/* {console.log(containers)} */}
           </Grid>
           <Grid item xs={6}>
             <Item>
               <h1>Randomize</h1>
+              <p>(do not read Bible without context)</p>
               <Button variant="contained" onClick={handleRandom}>
                 New Verse
               </Button>
               {showRandom && (
-                <Grid>
-                  <Item>
-                    <Draggable id={textRandom} key={textRandom}>
-                      <Card>
-                        {textRandom}
-                        <br></br>
-                        <br></br>
-                        {`${booknameRandom} `}
-                        {chapterRandom}:{verseRandom}
-                        <br></br>
-                      </Card>
-                    </Draggable>
-                  </Item>
-                </Grid>
+                <Draggable id={textRandom} key={textRandom}>
+                  <Card>
+                    {textRandom}
+                    <br></br>
+                    <br></br>
+                    {`${booknameRandom} `}
+                    {chapterRandom}:{verseRandom}
+                    <br></br>
+                  </Card>
+                </Draggable>
               )}
             </Item>
           </Grid>
@@ -378,7 +381,12 @@ function Verses() {
       );
 
       const container = over.id;
+      console.log(container);
       if (activeVerse) {
+        console.log(activeVerse);
+        // addVersesToFolderApi(activeVerse, container)
+        //   .then((response) => console.log("response", response))
+        //   .catch((error) => console.log(error));
         setContainers({
           ...containers,
           [container]: [...containers[container], activeVerse],

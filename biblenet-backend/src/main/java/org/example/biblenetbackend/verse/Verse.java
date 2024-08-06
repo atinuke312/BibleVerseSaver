@@ -1,11 +1,6 @@
 package org.example.biblenetbackend.verse;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-
-import java.util.List;
+import jakarta.persistence.*;
 
 @Entity
 public class Verse {
@@ -14,17 +9,18 @@ public class Verse {
 
     private String text;
 
-    private String bookName;
+    @Column(name = "bookname")private String bookName;
 
 
 
     private Integer chapter;
 
     private Integer verse;
-    @ManyToMany
-    private List<Folder> folder;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="folder_id")
+    private Folder folder;
 protected Verse(){}
-    public Verse(Integer id, String text, String bookName, Integer chapter, Integer verse, List<Folder> folder) {
+    public Verse(Integer id, String text, String bookName, Integer chapter, Integer verse, Folder folder) {
         this.id = id;
         this.text = text;
         this.bookName = bookName;
@@ -45,4 +41,51 @@ protected Verse(){}
                 '}';
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getBookName() {
+        return bookName;
+    }
+
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
+    }
+
+    public Integer getChapter() {
+        return chapter;
+    }
+
+    public void setChapter(Integer chapter) {
+        this.chapter = chapter;
+    }
+
+    public Integer getVerse() {
+        return verse;
+    }
+
+    public void setVerse(Integer verse) {
+        this.verse = verse;
+    }
+
+    public Folder getFolder() {
+        return folder;
+    }
+
+    public void setFolder(Folder folder) {
+        this.folder = folder;
+    }
 }

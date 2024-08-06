@@ -26,8 +26,7 @@ public class BiblenetBackendApplication {
 //	}
 
 	@Bean
-		@CrossOrigin(origins="http://localhost:3000/",allowCredentials = "true")
-
+	@CrossOrigin(origins="http://localhost:3000/",allowCredentials = "true")
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override

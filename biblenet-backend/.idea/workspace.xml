@@ -5,12 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7a669431-2837-42ff-8978-f71a48558870" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/biblenetbackend/BiblenetBackendApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/biblenetbackend/BiblenetBackendApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/biblenetbackend/verse/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/biblenetbackend/verse/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/biblenetbackend/verse/Folder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/biblenetbackend/verse/Folder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/biblenetbackend/verse/Verse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/biblenetbackend/verse/Verse.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/BiblenetBackendApplication$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/BiblenetBackendApplication$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/BiblenetBackendApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/BiblenetBackendApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/jwt/JwtAuthenticationController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/jwt/JwtAuthenticationController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/jwt/JwtSecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/jwt/JwtSecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/jwt/JwtTokenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/jwt/JwtTokenService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/verse/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/verse/Controller.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/verse/Folder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/verse/Folder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/verse/Verse.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/biblenetbackend/verse/Verse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../randombibleverse/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../randombibleverse/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../randombibleverse/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../randombibleverse/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../randombibleverse/src/BiblenetApp.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../randombibleverse/src/BiblenetApp.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../randombibleverse/src/api/BiblenetApiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../randombibleverse/src/api/BiblenetApiService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../randombibleverse/src/pages/Login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../randombibleverse/src/pages/Login.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../randombibleverse/src/pages/Verses.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../randombibleverse/src/pages/Verses.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -29,6 +44,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -116,7 +134,12 @@
       <workItem from="1718065763878" duration="249000" />
       <workItem from="1718122086357" duration="13337000" />
       <workItem from="1718229979493" duration="7021000" />
-      <workItem from="1718245220167" duration="192000" />
+      <workItem from="1718245220167" duration="32467000" />
+      <workItem from="1718991878474" duration="7387000" />
+      <workItem from="1720010386630" duration="3295000" />
+      <workItem from="1720025881864" duration="6365000" />
+      <workItem from="1722219643329" duration="2129000" />
+      <workItem from="1722962776178" duration="961000" />
     </task>
     <servers />
   </component>

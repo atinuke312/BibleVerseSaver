@@ -2,11 +2,11 @@ package org.example.biblenetbackend.verse;
 
 import org.example.biblenetbackend.jpa.FolderRepository;
 import org.example.biblenetbackend.jpa.VerseRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class Controller {
@@ -17,10 +17,26 @@ public class Controller {
         this.folderRepository = folderRepository;
     }
 
-@GetMapping("/folders")
+@GetMapping("/users/{username}/folders")
     public List<Folder>retrieveAllFolders(){
         return folderRepository.findAll();
 }
+    @PostMapping("/users/{username}/folders")
+    public Folder addNewFolder(@PathVariable String username,@RequestBody Folder folder){
+        return folderRepository.save(folder);
+    }
+    @GetMapping("/users/{username}/folders/{id}")
+    public Folder retrieveFolder(@PathVariable String username, @PathVariable int id){
+        return folderRepository.findById(id).get();
+    }
+
+
+
+//@PostMapping("/folders/${id}/verses")
+//public Verse addVerses(@PathVariable String name, @RequestBody Verse verse, @RequestBody Folder folder){
+//    Optional<Folder> folder = folderRepository.findById(id);
+//    return verseRepository.save(verse);
+//}
 
 
 
