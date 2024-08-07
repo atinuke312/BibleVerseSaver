@@ -158,7 +158,7 @@ function Verses() {
 
   function handleRandom() {
     axios
-      .get("https://labs.bible.org/api/?passage=random&type=json/")
+      .get("https://labs.bible.org/api/?passage=random&type=json")
       .then((response) => {
         setShowRandom(true);
         setTextRandom(response.data[0].text);
@@ -180,8 +180,8 @@ function Verses() {
   function handleSelect() {
     let url;
     verse2Input
-      ? (url = `https://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}-${verse2Input}&type=json/`)
-      : (url = `https://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}&type=json/`);
+      ? (url = `https://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}-${verse2Input}&type=json`)
+      : (url = `https://labs.bible.org/api/?passage=${booknameInput}+${setChapterInput}:${verse1Input}&type=json`);
 
     axios
       .get(url)
@@ -239,6 +239,10 @@ function Verses() {
 
   return (
     <div className="App">
+      <meta
+        http-equiv="Content-Security-Policy"
+        content="upgrade-insecure-requests"
+      />
       <DndContext onDragEnd={handleDragEnd}>
         <Grid
           container
