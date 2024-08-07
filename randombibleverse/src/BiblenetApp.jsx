@@ -14,8 +14,6 @@ export default function BiblenetApp() {
 
   return (
     <div>
-      {/* <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> </meta> */}
-
       {/* <AuthProvider> */}
       <BrowserRouter>
         <Routes>
