@@ -1,2 +1,2 @@
 # BibleVerseSaver
-RandomBibleVerse but better
+A digital file cabinet for your favorite Bible verse
